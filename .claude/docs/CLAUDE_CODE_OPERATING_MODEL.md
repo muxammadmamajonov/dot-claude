@@ -62,6 +62,29 @@ executes each stage.
    user to configure it — do not fabricate or work around it.
 7. **Document the why.** Every non-trivial decision → assumptions log / decision record (`.claude/CLAUDE.md` §7).
 
+## Cross-tool portability (Claude Code vs other agents)
+
+"Claude Code" and the "Claude CLI" are the **same runtime** (the `claude` binary — terminal, IDE,
+desktop, web). Everything in this OS is built in Claude Code's native conventions and runs there in
+**both interactive and headless modes** (`claude -p`, the Agent SDK, CI, cron). No conversion is needed
+for Claude Code. The cross-tool entry point for *other* agents is the root `AGENTS.md` (+ `GEMINI.md`).
+
+**Portability matrix** — what executes natively vs what travels as portable reference:
+
+| Layer | Claude Code (interactive + headless CLI) | Codex / Cursor / Gemini / Copilot / opencode |
+|---|---|---|
+| `CLAUDE.md` constitution | native (auto-loaded) | read as operating instructions (via `AGENTS.md`) |
+| `skills/<name>/SKILL.md` (+ scripts/evals) | native Agent Skills | portable — Agent Skills is a cross-tool format; else read as procedure |
+| `checklists` / `templates` / `stack-matrix` / `presets` / `docs` / `orchestration` | referenced by agents | fully portable plain-markdown playbooks |
+| `agents/*.md` subagents | native dispatch | read as role briefs; reproduce via the tool's own subagent mechanism |
+| `commands/*.md` slash commands | native `/command` | read as runnable workflows; invoke steps manually / via the tool's commands |
+| `settings.json` + `hooks/*.json` | native permissions + hooks | re-express deny/ask + guards in the tool's own config |
+| `scripts/integrity-check.py` | native (`/self-test`) | run directly with `python3` |
+
+**Principle:** the *methodology* is portable everywhere; only the *execution wiring* (subagent dispatch,
+slash commands, hooks, settings) is Claude Code-specific. In another tool, treat those four as the spec
+and reproduce their intent. The safety spine (above) is tool-independent and applies regardless.
+
 ## Where to go next
 
 - Driving a terminal safely → `.claude/skills/terminal-operations/SKILL.md`

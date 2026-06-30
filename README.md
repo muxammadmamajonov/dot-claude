@@ -184,8 +184,13 @@ The OS is meant to be tuned per organization and per project.
 
 ---
 
+## Works in any agent
+
+It's **native to Claude Code** (the `claude` CLI — interactive *and* headless `claude -p` / Agent SDK / CI): agents, slash commands, skills, hooks, and `settings.json` all execute with zero setup. It's also **usable in other agents** (Codex, Cursor, Gemini CLI, Copilot CLI, opencode) via the root **[`AGENTS.md`](AGENTS.md)** entry point — the constitution, skills, checklists, templates, and docs are portable plain markdown; only the execution wiring (subagent dispatch, slash commands, hooks, settings) is Claude Code-specific and is read as a spec elsewhere. Full breakdown: the portability matrix in [`.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md`](.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md).
+
 ## Learn more
 
+- **[AGENTS.md](AGENTS.md)** — cross-tool entry point (Claude Code + Codex/Cursor/Gemini/Copilot).
 - **[START_HERE.md](START_HERE.md)** — a 60-second quick start.
 - **[PROJECT_OS.md](PROJECT_OS.md)** — the design philosophy and full flow in depth.
 - **[examples/](examples/)** — worked project briefs across types (web/SaaS, mobile, game, AI agent).

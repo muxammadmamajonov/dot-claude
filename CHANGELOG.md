@@ -4,6 +4,22 @@ All notable changes to the Universal `.claude` AI Project OS are documented here
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-06-30
+
+Cross-tool portability — usable beyond Claude Code.
+
+### Added
+- **`AGENTS.md`** — root cross-tool entry point so non-Claude-Code agents (Codex, Cursor, Gemini CLI,
+  Copilot CLI, opencode) can adopt the system; defers to `.claude/CLAUDE.md` as the source of truth.
+- **`GEMINI.md`** — Gemini CLI pointer with tool-name mapping notes.
+- **Portability matrix** in `.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md` — what executes natively in
+  Claude Code (interactive + headless CLI) vs what travels as portable plain-markdown reference.
+
+### Notes
+- No change to Claude Code behavior — the OS remains fully native there (agents, commands, skills, hooks,
+  settings). This release only widens reach: the methodology layer is portable everywhere; execution
+  wiring stays Claude Code-specific and is read as a spec by other tools.
+
 ## [1.3.0] — 2026-06-30
 
 Desktop engineering layer for macOS, Windows, and Linux.
