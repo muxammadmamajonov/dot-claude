@@ -4,6 +4,23 @@ All notable changes to the Universal `.claude` AI Project OS are documented here
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] — 2026-06-30
+
+Desktop engineering layer for macOS, Windows, and Linux.
+
+### Added
+- **Desktop engineering layer** — `.claude/orchestration/desktop-routing-matrix.md` (framework
+  detection + modes incl. desktop-packaging-readiness & auto-update-readiness + per-OS caveats);
+  commands `/desktop-audit` and `/desktop-readiness`; checklists `desktop-production` and
+  `desktop-distribution` (macOS signing/notarization, Windows signing/installers, Linux packaging,
+  secure auto-update); agents `electron-engineer`, `tauri-engineer`, `desktop-security-auditor`
+  (Electron/Tauri shell + update integrity), `desktop-release-engineer` (signing/notarization/
+  packaging/auto-update across mac·win·linux).
+
+### Changed
+- Universal `.claude/orchestration/routing-matrix.md` now also detects desktop and routes to the
+  desktop layer; native/Qt/.NET/Flutter-desktop kept as routing knowledge via `desktop-engineer`.
+
 ## [1.2.0] — 2026-06-30
 
 Mobile release tooling and a gate fix.
