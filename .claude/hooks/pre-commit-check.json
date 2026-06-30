@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PreToolUse gate that runs the project's tests before a `git commit` and blocks the commit if they fail. Copy the `hooks` block into .claude/settings.json to activate. Only triggers on commands containing `git commit`; does nothing for other commands. Detects common test runners; if none is found it passes silently. SAFETY NOTE: activating this hook AUTO-EXECUTES the project's own test command (`npm test` / `pytest` / `go test`) inside the commit gate — if those tests seed databases, hit the network, or run `pre`/`posttest` side-effects, they run unsandboxed every commit. Enable it ONLY in a trusted repo or CI; never enable it on an untrusted/cloned project before reading its test scripts. It never installs packages, never mutates source, and never echoes secrets.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "in=$(cat); printf '%s' \"$in\" | grep -Eq 'git +commit' || exit 0; if [ -f package.json ] && grep -q '\"test\"' package.json; then npm test --silent >/dev/null 2>&1 || { echo '[pre-commit-check] Tests failed. Commit blocked. Fix tests, or run the commit yourself if intentional.' >&2; exit 2; }; elif [ -f pytest.ini ] || [ -f pyproject.toml ]; then python -m pytest -q >/dev/null 2>&1 || { echo '[pre-commit-check] pytest failed. Commit blocked.' >&2; exit 2; }; elif [ -f go.mod ]; then go test ./... >/dev/null 2>&1 || { echo '[pre-commit-check] go test failed. Commit blocked.' >&2; exit 2; }; fi; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

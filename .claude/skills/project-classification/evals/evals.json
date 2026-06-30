@@ -1,0 +1,41 @@
+{
+  "skill_name": "project-classification",
+  "description": "Verifies the skill (with detect_stack.py) classifies a repo into the correct primary type/preset and surfaces cross-cutting concerns. Each eval points at a fixture repo; create the fixture from `files` before running.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Classify this project and pick the matching preset.",
+      "files": ["package.json with a \"next\" + \"react\" dependency and a \"stripe\" dependency"],
+      "expected_output": "Primary type web-app (Next.js); cross-cutting concern: payments (Stripe) → pulls payments-engineer + privacy-compliance checklist.",
+      "assertions": [
+        "names web-app as the primary preset",
+        "identifies Next.js/React as the framework",
+        "flags payments as a cross-cutting concern",
+        "writes the result to docs/state/project-type.md"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "What kind of project is this and what preset should we use?",
+      "files": ["go.mod", "a Dockerfile", "an internal/ HTTP service with chi router"],
+      "expected_output": "Primary type backend-api (Go); containerized (Docker) noted; risk tier depends on data handled.",
+      "assertions": [
+        "names backend-api as the primary preset",
+        "identifies Go as the language",
+        "notes Docker/containerization from the Dockerfile",
+        "does not assume a web frontend"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Classify this repo.",
+      "files": ["hardhat.config.ts", "contracts/*.sol", "a hardhat test suite"],
+      "expected_output": "Primary type blockchain-app (Solidity/Hardhat); high risk tier (handles value on-chain); pulls security + threat-model.",
+      "assertions": [
+        "names blockchain-app as the primary preset",
+        "identifies Solidity/Hardhat",
+        "raises the risk tier and pulls in security review"
+      ]
+    }
+  ]
+}

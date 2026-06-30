@@ -1,0 +1,25 @@
+{
+  "description": "Opt-in PreToolUse guard that BLOCKS (exit 2) any attempt to edit, overwrite, or delete an existing database migration file — enforcing CLAUDE.md §8 ('deleting or editing existing migrations' is forbidden without explicit human approval). Copy the `hooks` block into .claude/settings.json to activate. Two branches: an `Edit|Write` branch that inspects the target file path, and a `Bash` branch that inspects `rm`/`mv`/`git rm` commands. A path is treated as a migration when it matches `migrations/`, `migration/`, `*/migrate/*`, or `db/migrate/`. The hook NEVER deletes, moves, or rewrites anything itself, NEVER installs packages, and NEVER echoes file contents or secrets — it only reads the tool-call JSON from stdin and decides allow/deny. When it blocks, it tells you to create a NEW forward migration instead of mutating history. New migration files (paths it has never seen as existing) are not its concern; it does not stop creating brand-new migrations, only editing/deleting ones.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "in=$(cat); path=$(printf '%s' \"$in\" | grep -oE '\"file_path\"[[:space:]]*:[[:space:]]*\"[^\"]+\"' | head -1 | sed -E 's/.*:[[:space:]]*\"([^\"]+)\"/\\1/'); printf '%s' \"$path\" | grep -Eq '(^|/)(migrations|migration)/|/migrate/|(^|/)db/migrate/' || exit 0; [ -e \"$path\" ] || exit 0; echo '[migration-safety-guard] BLOCKED: editing or overwriting an existing migration is forbidden by CLAUDE.md §8. Migrations are append-only history. Create a NEW forward migration (a fresh timestamped file) that makes the change instead. If this is genuinely necessary, get explicit human approval and run it yourself.' >&2; exit 2"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "in=$(cat); cmd=$(printf '%s' \"$in\" | grep -oE '\"command\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"' | head -1); printf '%s' \"$cmd\" | grep -Eq '(rm|mv|git[[:space:]]+rm|unlink)\\b' || exit 0; printf '%s' \"$cmd\" | grep -Eiq 'migrat' || exit 0; echo '[migration-safety-guard] BLOCKED: this command targets a migration file (rm/mv/git rm against a *migration* path). Deleting or moving existing migrations is forbidden by CLAUDE.md §8 — they are append-only history. Create a new forward migration instead. Nothing was deleted.' >&2; exit 2"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PreToolUse guard. BLOCKS piping a remote script straight into a shell (curl|sh, wget|bash — the classic remote-code-execution install) and WARNS on any package install so nothing is added unvetted. It never installs anything itself. Copy the `hooks` block into .claude/settings.json to activate.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "in=$(cat); printf '%s' \"$in\" | grep -Eq '(curl|wget|fetch)' && printf '%s' \"$in\" | grep -Eq '\\|[[:space:]]*(sudo[[:space:]]+)?(sh|bash|zsh|python3?|node|ruby|perl)' && { echo '[package-install-guard] Blocked piping a remote script into a shell. Download it, read it, then run it yourself if you trust it.' >&2; exit 2; }; printf '%s' \"$in\" | grep -Eq '(npm|pnpm|yarn)[[:space:]]+(i|install|add)|pip3?[[:space:]]+install|gem[[:space:]]+install|cargo[[:space:]]+install|go[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install' && echo '[package-install-guard] Package install detected — verify the name, source, and version before adding it; prefer pinned versions and a committed lockfile.' >&2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

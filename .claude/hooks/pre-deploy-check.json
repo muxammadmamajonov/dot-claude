@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PreToolUse gate that intercepts deploy/publish commands and reminds you to clear the production and launch gates first. Copy the `hooks` block into .claude/settings.json to activate. It blocks the command once (exit 2) with a checklist reminder; re-run intentionally to proceed.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "grep -Eiq 'vercel +(deploy +)?--prod|netlify +deploy|terraform +apply|kubectl +apply|docker +push|fly(ctl)? +deploy|gh +release +create|supabase +db +push|npm +publish|serverless +deploy|cap +deploy' && { echo '[pre-deploy-check] Deploy detected. Before shipping, confirm: production checklist passed (.claude/checklists/production.md), launch checklist reviewed (.claude/checklists/launch.md), and a rollback plan exists (.claude/templates/deployment-plan.md). Re-run the command to proceed.' >&2; exit 2; }; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

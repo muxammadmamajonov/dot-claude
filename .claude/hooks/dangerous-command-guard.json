@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PreToolUse guard that blocks obviously destructive shell commands. Copy the `hooks` block into .claude/settings.json (merging with any existing hooks) to activate. It is intentionally conservative: it blocks a set of irreversible patterns and tells you to run them yourself in a terminal if you really mean it. It anchors on the destructive VERB (not a trailing `;`) so wrapped forms like `psql -c \"delete from users\"` are caught, and covers git working-tree data-loss (checkout --/restore/stash drop), `find … -delete`, non-recursive `chmod 777`, and DB-CLI DROP/TRUNCATE substrings. It reads the tool event from stdin. It cannot catch every obfuscation (spacing, shell vars, base64) — the always-on baseline lives in settings.json `permissions.deny`/`ask`; this hook adds substring/regex coverage prefix rules cannot express. Safe-by-default: it only ever blocks (exit 2); it never mutates, installs, or echoes file contents.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "in=$(cat); printf '%s' \"$in\" | grep -Eiq 'rm +-r *f|rm +-f *r|git +push +.*(--force|-f )|git +push +-f$|--hard +HEAD|drop +(database|table|schema)|truncate +(table|-| )|delete +from +|mkfs|dd +if=|> */dev/(sd|disk|nvme)|chmod +(-r +)?[0-7]?777|git +checkout +--|git +restore |git +stash +(clear|drop)|find +.*-delete|:\\(\\)\\{ *:\\|:' && { echo '[dangerous-command-guard] Blocked a potentially destructive command. If you are certain, run it yourself in a terminal.' >&2; exit 2; }; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

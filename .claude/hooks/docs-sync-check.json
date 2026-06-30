@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PostToolUse reminder that fires after source files change, nudging you to keep specs, READMEs, ADRs, runbooks, and .claude/templates artifacts in sync. Advisory only (never blocks). Copy the `hooks` block into .claude/settings.json to activate.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[docs-sync-check] Source changed. Update affected docs (specs, README, ADRs, runbooks) and keep .claude/templates artifacts current. See .claude/skills/documentation/SKILL.md.' >&2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

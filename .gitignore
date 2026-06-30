@@ -1,0 +1,73 @@
+# ─────────────────────────────────────────────────────────────
+# Universal .claude AI Project OS — .gitignore
+# Keep the public template clean: ship .claude/ and the root docs,
+# never runtime memory, logs, secrets, dependencies, or build output.
+# ─────────────────────────────────────────────────────────────
+
+# Runtime memory / logs (must never be shipped in the template)
+.remember/
+logs/
+*.log
+*.pid
+last-save-ts
+
+# Temp / scratch
+tmp/
+.tmp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa
+id_ed25519
+.aws/
+.ssh/
+.netrc
+.git-credentials
+secrets/
+credentials
+credentials.json
+
+# Project-generated OS output (when this template is USED in a real project,
+# the OS writes specs/decisions/state to the project's own docs/ — not tracked
+# in the template itself). Adopters: remove the next line in your own project.
+# docs/
+
+# Dependencies
+node_modules/
+.pnp.*
+vendor/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+target/
+*.tsbuildinfo
+
+# OS / editor junk
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace

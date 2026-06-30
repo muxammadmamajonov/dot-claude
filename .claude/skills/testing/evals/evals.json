@@ -1,0 +1,40 @@
+{
+  "skill_name": "testing",
+  "description": "Verifies the skill (with detect_test_runner.py) targets the correct runner and proposes a sound test strategy. Each eval points at a fixture repo; create the fixture from `files` before running.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Set up a test plan for this project.",
+      "files": ["package.json with a \"vitest\" devDependency and a src/ of TypeScript modules"],
+      "expected_output": "Detects vitest (`npx vitest run`); proposes unit tests for pure logic, integration for I/O boundaries, and a CI gate.",
+      "assertions": [
+        "identifies vitest as the runner",
+        "gives the correct run command (npx vitest run)",
+        "proposes a unit/integration split rather than only unit tests",
+        "recommends a CI gate"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "What's the right way to test this service and how do I run it?",
+      "files": ["pyproject.toml with [tool.pytest.ini_options]", "a tests/ directory"],
+      "expected_output": "Detects pytest (`python -m pytest -q`); recommends fixtures, parametrization, and coverage target.",
+      "assertions": [
+        "identifies pytest as the runner",
+        "gives the run command (python -m pytest)",
+        "mentions coverage and edge-case/parametrized tests"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "This Go repo has no tests yet — add a testing approach.",
+      "files": ["go.mod", "a package with exported functions and no _test.go files"],
+      "expected_output": "Uses `go test ./...`; proposes table-driven tests next to each package and a CI gate; notes the absence of existing tests.",
+      "assertions": [
+        "identifies go test as the runner",
+        "recommends table-driven tests (idiomatic Go)",
+        "notes there are currently no tests and proposes adding them"
+      ]
+    }
+  ]
+}

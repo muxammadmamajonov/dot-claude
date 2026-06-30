@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PreToolUse CAUTION guard for sensitive production / config files. Copy the `hooks` block into .claude/settings.json to activate. It matches `Edit|Write` and inspects only the target file PATH (never the contents) read from the tool-call JSON on stdin. When the path looks like infrastructure or production config — `.env`, `.env.*`, `**/production*`, `*.tf`, `**/terraform/**`, `**/k8s/**`, `**/helm/**`, `Dockerfile.prod`, or a CI deploy workflow (`.github/workflows/*deploy*`) — it exits 2 to PAUSE the change and print a caution. This is a deliberate speed-bump, not a hard ban: the message asks you to confirm consciously and proceed yourself if the edit is intended (re-issue with intent, or temporarily disable the hook). It NEVER echoes file contents or secrets, NEVER auto-edits, deletes, or installs anything, and NEVER touches production directly — it only decides whether to warn on the pending tool call.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "in=$(cat); path=$(printf '%s' \"$in\" | grep -oE '\"file_path\"[[:space:]]*:[[:space:]]*\"[^\"]+\"' | head -1 | sed -E 's/.*:[[:space:]]*\"([^\"]+)\"/\\1/'); base=$(basename \"$path\"); printf '%s' \"$path\" | grep -Eq '(^|/)\\.env($|\\.)|(^|/)production[^/]*|\\.tf$|(^|/)terraform/|(^|/)k8s/|(^|/)helm/|(^|/)Dockerfile\\.prod$|(^|/)\\.github/workflows/[^/]*deploy[^/]*' || exit 0; echo \"[production-file-guard] CAUTION: '$base' looks like a sensitive production or infrastructure config file (env / Terraform / Kubernetes / Helm / prod Dockerfile / CI deploy workflow). Changes here can affect real environments, credentials, or deploys. This is a caution, not a hard block — review the change consciously, ensure you have a rollback, and re-run it yourself if it is intended (CLAUDE.md §8). Secrets must stay in a secret manager, never in committed files.\" >&2; exit 2"
+          }
+        ]
+      }
+    ]
+  }
+}

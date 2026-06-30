@@ -1,0 +1,16 @@
+{
+  "description": "Opt-in PostToolUse reminder that fires after files are written/edited, nudging you to run the formatter, linter, and type-check. Advisory only (never blocks). Copy the `hooks` block into .claude/settings.json to activate. To make it auto-run tools, replace the echo with your project's format/lint commands (keep the trailing `exit 0` so it stays non-blocking).",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[post-edit-check] File changed. Run the project formatter, linter, and type-check before review (see .claude/skills/testing/SKILL.md and .claude/checklists/qa.md).' >&2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
