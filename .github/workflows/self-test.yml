@@ -1,0 +1,28 @@
+name: self-test
+
+# Integrity gate for the .claude AI Project OS itself.
+# Read-only: validates cross-references, file depth, frontmatter, and JSON.
+# No secrets, no network, no writes — safe to run on every PR.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - ".claude/**"
+      - ".github/workflows/self-test.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    name: .claude integrity-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Run .claude/self-test
+        run: python3 .claude/scripts/integrity-check.py

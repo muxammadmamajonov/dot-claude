@@ -36,7 +36,7 @@ The orchestrator states the mode up front and does not silently switch modes mid
 | Backend feature/build | `engineering/backend-engineer` + matched `stack/backend/*` | api-architect | backend, api-design | backend, api |
 | API design/audit | `engineering/api-architect` | backend-engineer | api-design | api |
 | Database/data layer | `engineering/database-architect` + matched `stack/database/*` | — | data-modeling, postgres/… | database, data-model |
-| Auth & permissions | `quality/security-auditor` | backend-engineer | security | security, privacy-compliance |
+| Auth & permissions | `quality/auth-permission-reviewer` | security-auditor, backend-engineer | security | security, privacy-compliance |
 | Security audit | `quality/security-auditor` | privacy-compliance-auditor | security | security, dependencies |
 | Performance | `quality/performance-engineer` | frontend/backend eng | performance | performance, cost |
 | QA / tests | `quality/qa-engineer` + `quality/test-automation-engineer` | — | testing | qa |
