@@ -6,7 +6,8 @@
       "Bash(git remote *)",
       "Bash(echo \"remote: $\\(git remote get-url origin\\)\")",
       "Bash(python3 .claude/scripts/integrity-check.py)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(grep -cE '^\\\\.remember|^docs/|\\\\.log$')"
     ]
   }
 }
