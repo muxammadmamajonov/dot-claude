@@ -4,6 +4,30 @@ All notable changes to the Universal `.claude` AI Project OS are documented here
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] — 2026-06-30
+
+Web + mobile engineering layers, an agent/skill power-up, and a CI integrity gate.
+
+### Added
+- **Agent power-up** — all agents upgraded to first-class Claude Code subagents with
+  least-privilege `tools:`, `color:`, `## When to invoke` worked scenarios, and a
+  `## When blocked / recovery` contract.
+- **Web engineering layer** — `orchestration/web-routing-matrix.md`; commands `/web-audit`,
+  `/web-readiness`; checklist `web-production`; agents `codebase-mapper`,
+  `playwright-e2e-engineer`, `refactoring-specialist`, `bug-fix-specialist`,
+  `auth-permission-reviewer`.
+- **Mobile engineering layer** — `orchestration/mobile-routing-matrix.md`; commands
+  `/mobile-audit`, `/store-readiness`; checklists `mobile-production`, `app-store-readiness`;
+  agents `mobile-security-auditor` (MASVS), `mobile-release-engineer`, `mobile-e2e-engineer`;
+  preset `telegram-mini-app`.
+- **Bundled skill tooling** — `project-classification/scripts/detect_stack.py` and
+  `testing/scripts/detect_test_runner.py`, each with an `evals/` set.
+- **CI gate** — `.github/workflows/self-test.yml` runs the integrity check on push/PR.
+
+### Changed
+- Universal `orchestration/routing-matrix.md` now detects web vs mobile vs mixed and loads
+  the matching engineering layer. Skill descriptions sharpened for reliable triggering.
+
 ## [1.0.0] — 2026-06-26
 
 First public release of the template.

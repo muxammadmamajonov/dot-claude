@@ -27,14 +27,14 @@ The value is the **flow and the gates between stages**, not any single clever pr
 |------|-------|---------|
 | **`CLAUDE.md`** | 1 | The constitution: the 9-stage flow, the Definition of Done, and the hard safety rules (§8). Project law. |
 | **`settings.json`** | 1 | Always-on safety baseline: `permissions.deny` blocks destructive ops; `permissions.ask` gates pushes, deploys, migrations, installs. |
-| **`agents/`** | 116 | Specialized roles in six families — `core`, `engineering`, `quality`, `design`, `domain`, `stack`. The doers. |
+| **`agents/`** | 124 | Specialized roles in six families — `core`, `engineering`, `quality`, `design`, `domain`, `stack`. The doers. |
 | **`skills/`** | 65 | Reusable, on-demand procedures, one folder per skill at `skills/<name>/SKILL.md`. The how-to library. |
-| **`commands/`** | 30 | Slash-command entry points — the invokable workflow and its gates. |
+| **`commands/`** | 34 | Slash-command entry points — the invokable workflow and its gates. |
 | **`hooks/`** | 9 | Opt-in, safe-by-default JSON guards. Off until you copy one into `settings.json`; they warn or block, never mutate or expose secrets. |
-| **`orchestration/`** | 1 | `routing-matrix.md` — maps each project type to its minimal active team of agents, skills, and checklists. |
-| **`presets/`** | 37 | Per-project-type starting configs that pre-wire agents, skills, stack-matrix entries, checklists, and templates. |
+| **`orchestration/`** | 3 | `routing-matrix.md` (universal) plus the `web-routing-matrix.md` and `mobile-routing-matrix.md` engineering layers — map each project type to its minimal active team. |
+| **`presets/`** | 38 | Per-project-type starting configs that pre-wire agents, skills, stack-matrix entries, checklists, and templates. |
 | **`stack-matrix/`** | 20 | Technology decision matrices per concern (web, backend, database, cloud, AI/ML, payments, …) with real trade-offs. |
-| **`checklists/`** | 29 | Gate definitions, every item tagged **P0/P1/P2/P3**. Audits run against these. |
+| **`checklists/`** | 32 | Gate definitions, every item tagged **P0/P1/P2/P3**. Audits run against these. |
 | **`templates/`** | 29 | Blank, structured documents agents fill in (spec, architecture, data model, ADR, runbook, …). |
 | **`scripts/`** | 1 | `integrity-check.py` — the link/frontmatter/JSON verifier behind `/self-test`. |
 | **`docs/`** | 6 | Portable operating-capability guides for wielding every Claude Code primitive safely. |
@@ -127,6 +127,17 @@ Beyond the project-delivery flow, the OS ships portable guides in `.claude/docs/
 | [`HOOKS_SAFETY_MODEL.md`](.claude/docs/HOOKS_SAFETY_MODEL.md) | The opt-in hook model that enforces the safety rules mechanically. |
 
 These pair with commands that operationalize them: `/setup-mcp` (wire an MCP server), `/headless-run` (drive the OS non-interactively), `/manage-routines` (create and tend scheduled agents), `/commit-ready` (prep a clean, reviewed commit), and `/create-github-issues` (turn a roadmap into tracked issues).
+
+---
+
+## Web & mobile engineering layers
+
+On top of the universal flow, the OS ships two elite-team **engineering layers**. `/route` detects whether a project is web, mobile, or mixed and loads only the relevant one.
+
+- **Web** — `.claude/orchestration/web-routing-matrix.md`: task→specialist routing with operating **modes** (audit-only, fix-and-verify, production-hardening, ui-ux-polish, security-review, performance-review, release-readiness, documentation) and verification loops. Commands: **`/web-audit <scope> [--mode]`** (frontend, backend, api, database, security, performance, accessibility, responsive, devops, observability, full) and **`/web-readiness`** (ship gate against `.claude/checklists/web-production.md`). Specialists added: `codebase-mapper`, `playwright-e2e-engineer`, `refactoring-specialist`, `bug-fix-specialist`, `auth-permission-reviewer`.
+- **Mobile** — `.claude/orchestration/mobile-routing-matrix.md`: platform detection (React Native, Expo, Flutter, native iOS/Android, KMP, Ionic/Capacitor, PWA, Telegram Mini App) plus an **app-store-readiness** mode. Commands: **`/mobile-audit <scope> [--mode]`** and **`/store-readiness`** (App Store + Google Play gate against `.claude/checklists/app-store-readiness.md` + `mobile-production.md`). Specialists added: `mobile-security-auditor` (MASVS), `mobile-release-engineer` (Fastlane/EAS/signing), `mobile-e2e-engineer` (Maestro/Detox/XCUITest/Espresso); per-framework engineers already live under `.claude/agents/stack/mobile/`. PWA & Telegram Mini Apps route to the web layer plus `.claude/presets/telegram-mini-app.md` (server-side `initData` validation is a P0).
+
+For UI/visual polish both layers prefer the high-install `frontend-design` skill (and `vercel-react-native-skills` for RN) when installed. A GitHub Actions workflow (`.github/workflows/self-test.yml`) runs the integrity gate on every push/PR.
 
 ---
 
