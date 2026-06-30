@@ -4,6 +4,24 @@ All notable changes to the Universal `.claude` AI Project OS are documented here
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-06-30
+
+Mobile release tooling and a gate fix.
+
+### Added
+- **Mobile release scaffold** — `.claude/skills/mobile/scripts/scaffold_mobile_release.py`
+  generates starter Fastlane (`Fastfile`/`Appfile`) and/or EAS (`eas.json`) config, a signing
+  `.env.example` (placeholder var names only), and a `RELEASE.md` runbook. Idempotent, stdlib-only,
+  no network, no secrets.
+- **Per-store submission references** — `.claude/skills/mobile/references/app-store-submission.md`
+  and `google-play-submission.md`: signing, build/upload (Fastlane + EAS), required disclosures, and
+  the top rejection causes. Wired into the `mobile` skill and `mobile-release-engineer`.
+
+### Changed
+- **Gate fix** — `integrity-check.py` now requires frontmatter only on `SKILL.md`, not on bundled
+  `references/` (progressive-disclosure files), so skills can ship reference docs without tripping `/self-test`.
+- Stopped tracking machine-local `.claude/settings.local.json` (now git-ignored).
+
 ## [1.1.0] — 2026-06-30
 
 Web + mobile engineering layers, an agent/skill power-up, and a CI integrity gate.
