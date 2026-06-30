@@ -71,3 +71,6 @@ Desktop.ini
 .vscode/
 *.sublime-project
 *.sublime-workspace
+
+# Machine-local Claude Code overrides (per-developer; never ship in the template)
+.claude/settings.local.json

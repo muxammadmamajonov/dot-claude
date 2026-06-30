@@ -40,7 +40,7 @@ tools: [Read, Write, Edit, Bash, Grep, Glob]
 - The pipeline produces a signed build that **installs on a real device / lands on TestFlight or Play internal** — report the real result, never assume. Tests run in the pipeline are real; secrets never appear in logs.
 
 ## Tools & resources
-- Skills: `.claude/skills/devops/SKILL.md`. Checklists: `.claude/checklists/release-rollback.md`, `.claude/checklists/app-store-readiness.md`, `.claude/checklists/mobile-production.md`. Command: `.claude/commands/store-readiness.md`. MCP: Fastlane/EAS/store-API servers if configured (never assume they exist).
+- Skills: `.claude/skills/devops/SKILL.md`, `.claude/skills/mobile/SKILL.md`. Bundled starter: `.claude/skills/mobile/scripts/scaffold_mobile_release.py` (generates Fastlane/EAS config + `.env.example` placeholders + `RELEASE.md`; idempotent, no secrets) — run it to bootstrap a project's release setup. Submission references: `.claude/skills/mobile/references/app-store-submission.md`, `.claude/skills/mobile/references/google-play-submission.md`. Checklists: `.claude/checklists/release-rollback.md`, `.claude/checklists/app-store-readiness.md`, `.claude/checklists/mobile-production.md`. Command: `.claude/commands/store-readiness.md`. MCP: Fastlane/EAS/store-API servers if configured (never assume they exist).
 
 ## Must follow
 - Secrets (certs, keystores, API keys, App Store/Play credentials) come from a secret store — never committed, never echoed in logs.

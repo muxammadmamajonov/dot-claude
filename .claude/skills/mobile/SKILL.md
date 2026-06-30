@@ -20,6 +20,18 @@ description: >
 
 ---
 
+## Bundled tooling
+
+- **Release scaffold (script):** `scripts/scaffold_mobile_release.py` generates a correct starter for
+  CI/store release — `python3 .claude/skills/mobile/scripts/scaffold_mobile_release.py --platform <expo|rn|flutter|ios|android> <dir>`.
+  It writes Fastlane (`Fastfile`/`Appfile`) and/or EAS (`eas.json`), a `.env.example` of signing/credential
+  var **names** (never values), and a `RELEASE.md` runbook. Idempotent (won't overwrite without `--force`),
+  stdlib-only, no network, no secrets. Used by `.claude/agents/engineering/mobile-release-engineer.md`.
+- **Per-store submission references:** `references/app-store-submission.md` (Apple) and
+  `references/google-play-submission.md` (Google) — read the relevant one during `app-store-readiness` /
+  `/store-readiness`; they cover signing, build/upload (Fastlane + EAS), required disclosures, and the top
+  rejection causes. Verify against the **current** store policies (they change).
+
 ## Workflow
 
 1. **Classify the project** — Read `docs/specs/product.md` and `.claude/stack-matrix/` to confirm platform (iOS / Android / both), framework, minimum OS versions, and distribution channel (App Store, Play Store, Enterprise MDM, internal TestFlight/Firebase App Distribution).

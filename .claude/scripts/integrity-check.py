@@ -73,6 +73,10 @@ def check_frontmatter():
             for fn in fs:
                 if not fn.endswith(".md"):
                     continue
+                # Under skills/, only the SKILL.md itself is a registered skill needing
+                # frontmatter; bundled references/examples (progressive disclosure) do not.
+                if sub == "skills" and fn != "SKILL.md":
+                    continue
                 fp = os.path.join(dp, fn)
                 head = "".join(open(fp, encoding="utf-8", errors="ignore").readlines()[:8])
                 if "description:" not in head:
