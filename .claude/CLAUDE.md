@@ -22,6 +22,8 @@ When a user asks for *anything* non-trivial ("build me X", "add feature Y", "mak
 
 The only work allowed before classification + interview are: reading the repo, asking clarifying questions, and recording assumptions.
 
+**What counts as trivial** (and so does not require the full flow): a pure explanation or question with no code change (`.claude/commands/explain.md`), or a narrowly-scoped, easily-reversible, single-file-or-tight-cluster fix with no new dependency, schema change, or security/auth/payments/secrets surface (`.claude/commands/quick-fix.md` — **lite mode**, see `.claude/docs/OPERATING_MODES.md`). When unsure whether something is trivial, treat it as non-trivial. No mode ever weakens §8.
+
 ---
 
 ## 2. The mandatory flow (9 stages)
@@ -60,7 +62,7 @@ All paths are relative to the project's `.claude/` directory. Cross-reference th
 - `self-test.md` — verify the integrity of this `.claude/` system itself (links, shallow files, frontmatter, JSON) via `.claude/scripts/integrity-check.py`.
 - `route.md` — classify, then assemble the **minimal active team** (only the agents/skills/checklists the matched preset + detected cross-cutting concerns require) into `docs/state/active-team.md`. Backed by `.claude/orchestration/routing-matrix.md` and the orchestrator's selection algorithm. Detects monorepo topology first (`.claude/orchestration/monorepo-routing-matrix.md`) and classifies per-package when found.
 - `threat-model.md` — STRIDE threat model (`security-auditor` + `.claude/templates/threat-model.md`). `plan-scale.md` — capacity/scaling/SLO plan (`performance-engineer` + `reliability-engineer`).
-- `onboard.md` — fast "how this repo works" brief for a new engineer or a fresh AI session (codebase-mapper + route, written to `docs/ONBOARDING.md`).
+- `onboard.md` — fast "how this repo works" brief for a new engineer or a fresh AI session (codebase-mapper + route, written to `docs/ONBOARDING.md`). `quick-fix.md` — lite-mode fast path for small, well-understood, low-risk changes (`.claude/docs/OPERATING_MODES.md`). `explain.md` — read-only explanation of existing code/architecture; never modifies anything.
 
 **Agents** — specialized roles Claude adopts (`.claude/agents/`)
 - `core/` — `orchestrator` (runs the flow, §4), `business-analyst` (stage 2 interview), `product-manager`, `solution-architect` (stage 4 specs/design), `technical-lead` (stage 5 decomposition), `requirements-engineer`, `system-analyst`, `project-manager`, `documentation-writer`, `code-reviewer`.
@@ -217,7 +219,8 @@ Start at `.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md`.
 3. **Commands** — the invokable 9-stage workflow + gates in `.claude/commands/`.
 4. **Custom commands** — add repeatable workflows: `/brainstorm-project` (pre-classification ideation),
    `/commit-ready` (pre-commit Definition-of-Done gate), `/create-github-issues`, `/setup-mcp`,
-   `/headless-run`, `/manage-routines`, `/onboard` (fast context for a new engineer or fresh AI session).
+   `/headless-run`, `/manage-routines`, `/onboard` (fast context for a new engineer or fresh AI session),
+   `/quick-fix` (lite-mode path for small changes), `/explain` (read-only, no changes).
 5. **Skills** — repeatable *procedures* in `.claude/skills/` (the "how"); commands stay thin, skills hold method.
 6. **MCP** — reach real tools/data under least privilege; **never assume a server exists** — ask the user to
    configure it. `.claude/docs/MCP_STRATEGY.md`, `.claude/skills/mcp-integration/SKILL.md`,
@@ -238,9 +241,11 @@ Start at `.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md`.
 **Beyond the ten — governance and scale add policy on top of these primitives, not new ones:**
 `.claude/docs/COMPLIANCE.md` (gates/checklists mapped to SOC2/ISO 27001/SLSA/OWASP — a control-mapping
 aid, not a certification), `.claude/docs/ORG_CONFIG_LAYERING.md` (an org-tier floor a repo can tighten but
-never weaken), `.claude/orchestration/monorepo-routing-matrix.md` (per-package classification and gate
-aggregation in a multi-package repo), and `.github/CODEOWNERS` + `.claude/templates/rfc.md` (who reviews
-what, and how a change to this OS itself gets proposed — see `CONTRIBUTING.md` §11–§12).
+never weaken), `.claude/docs/OPERATING_MODES.md` (full/lite/expert — when the full 9-stage ceremony can be scoped
+down, and what never scopes down), `.claude/orchestration/monorepo-routing-matrix.md` (per-package
+classification and gate aggregation in a multi-package repo), and `.github/CODEOWNERS` +
+`.claude/templates/rfc.md` (who reviews what, and how a change to this OS itself gets proposed — see
+`CONTRIBUTING.md` §11–§12).
 
 **Safety spine for all ten:** read before write · least privilege, least blast radius · never expose secrets ·
 human-in-the-loop for the irreversible · read/review-only by default for autonomy · never assume external

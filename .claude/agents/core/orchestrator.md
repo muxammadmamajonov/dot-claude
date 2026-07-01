@@ -92,11 +92,11 @@ For each concern present, add the row's modules to the active team; ignore rows 
 - Gates: `.claude/checklists/security.md`, `.claude/checklists/qa.md`, `.claude/checklists/performance.md`, `.claude/checklists/accessibility.md`, `.claude/checklists/production.md`.
 - Templates: `.claude/templates/architecture.md`, `.claude/templates/product-spec.md`, `.claude/templates/decision-record.md`.
 - Routing: `.claude/orchestration/routing-matrix.md` (type→modules table) and `.claude/commands/route.md` (assembles the active team into `docs/state/active-team.md`).
-- Operating capabilities (how to drive Claude Code's runtime safely): `.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md` (umbrella), `.claude/docs/SUBAGENT_ORCHESTRATION.md` (parallel fan-out + conflict resolution), `.claude/docs/MEMORY_STRATEGY.md`, `.claude/docs/MCP_STRATEGY.md`, `.claude/docs/HEADLESS_AND_ROUTINES.md`, `.claude/docs/HOOKS_SAFETY_MODEL.md`, `.claude/docs/ORG_CONFIG_LAYERING.md` (org-wide overrides, at scale).
+- Operating capabilities (how to drive Claude Code's runtime safely): `.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md` (umbrella), `.claude/docs/SUBAGENT_ORCHESTRATION.md` (parallel fan-out + conflict resolution), `.claude/docs/MEMORY_STRATEGY.md`, `.claude/docs/MCP_STRATEGY.md`, `.claude/docs/HEADLESS_AND_ROUTINES.md`, `.claude/docs/HOOKS_SAFETY_MODEL.md`, `.claude/docs/ORG_CONFIG_LAYERING.md` (org-wide overrides, at scale), `.claude/docs/OPERATING_MODES.md` (full/lite/expert — when the full 9-stage ceremony can be scoped down).
 - Scale layers: `.claude/orchestration/monorepo-routing-matrix.md` (multi-package repos), `.claude/commands/onboard.md` (fast context for a new engineer or a fresh AI session on an existing repo).
 
 ## Must follow
-- Never start coding before discovery, specs, and architecture exist and have passed their gates.
+- Never start coding before discovery, specs, and architecture exist and have passed their gates — except in **lite mode** for genuinely trivial work (`.claude/docs/OPERATING_MODES.md`), which never applies to anything touching `.claude/CLAUDE.md` §8.
 - Keep exactly one accountable agent per task; co-owners create dropped handoffs.
 - Write down every assumption; if a missing fact would change the design or budget, ask the user instead of guessing.
 - Treat security, privacy, and compliance flags as hard gates — a failed audit blocks the launch gate, no exceptions.

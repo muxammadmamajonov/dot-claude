@@ -58,6 +58,37 @@ Third phase of the enterprise roadmap (design:
 `docs/superpowers/specs/2026-06-30-enterprise-and-cross-tool-design.md`). Next: low-magic ergonomics
 (v1.8.0).
 
+## [1.8.0] — 2026-07-01
+
+Enterprise Phase 4 — low-magic ergonomics.
+
+### Added
+- **Operating modes** — `.claude/docs/OPERATING_MODES.md`: full (default, unchanged) / lite (skip ceremony
+  for genuinely trivial, low-risk work — never skips verification, never applies to §8-listed areas,
+  auto-escalates on scope creep) / expert (self-navigate stages, one-line gate-skip acknowledgments
+  instead of a fresh negotiation each time). `.claude/CLAUDE.md` §1 gained a short, additive
+  clarification of what counts as trivial, pointing here.
+- **`/quick-fix`** — lite mode's entry point: eligibility gate, tiny plan, implement, verify, one-line
+  assumption if non-obvious, auto-escalate to the full flow on scope creep or a §8-listed surface.
+- **`/explain`** — read-only explanation of existing code/architecture/flow, with `file:line` references;
+  never edits, never writes to disk unless asked.
+- **Reduced permission friction** — `.claude/settings.json`'s `allow` list now covers the everyday loop
+  out of the box: read-only git, local commits, test/lint/build/typecheck across the common ecosystems
+  (npm/yarn/pnpm, pytest, cargo, go, this repo's own self-test scripts), and read-only `gh`. Narrowed
+  `netlify deploy` to only ask on `--prod`; added `gh repo delete` to the deny list. The machine-local
+  `.claude/settings.local.json` override is retired — its useful entries are now in the shipped
+  `settings.json`, so a fresh clone no longer needs a personal file to run friction-free under Claude
+  Code's accept-edits/auto modes.
+
+### Changed
+- `.claude/agents/core/orchestrator.md` and `.claude/CLAUDE.md` §11 cross-reference the new modes doc.
+
+### Notes
+Final phase of the enterprise roadmap (design:
+`docs/superpowers/specs/2026-06-30-enterprise-and-cross-tool-design.md`). All four pillars — trust &
+determinism (v1.5.0), governance & compliance (v1.6.0), team & scale (v1.7.0), low-magic ergonomics
+(v1.8.0) — are now shipped.
+
 ## [1.5.0] — 2026-06-30
 
 Enterprise Phase 1 — generated Cursor/Copilot adapters + a trust-spine linter.

@@ -6,6 +6,55 @@ It is **universal by design.** It does not assume you are building a web app. Th
 
 ---
 
+## Get started in one prompt — works with any AI
+
+Copy the block below into any AI coding assistant, in any project. It clones this repo, drops `.claude/`
+and `AGENTS.md` into place, and hands control to the constitution — the assistant classifies your
+project and takes it from there. No manual setup required first.
+
+```
+You are an AI coding assistant. Adopt the Universal `.claude` AI Project Operating System from this
+repository into the current project: https://github.com/muxammadmamajonov/dot-claude.git
+
+1. If you have shell/file access: clone that repo to a temp location and copy its `.claude/` directory
+   and its `AGENTS.md` file into the root of THIS project (the one we're working in right now), next to
+   the existing files — do not overwrite or delete anything else here.
+
+     git clone --depth 1 https://github.com/muxammadmamajonov/dot-claude.git /tmp/dotclaude-os
+     cp -R /tmp/dotclaude-os/.claude ./.claude
+     cp /tmp/dotclaude-os/AGENTS.md ./AGENTS.md
+
+   If you don't have shell/file access, tell me these three commands so I can run them, or fetch the
+   files directly from the repository.
+
+2. Read `.claude/CLAUDE.md` in full. It is this project's constitution and overrides your default
+   behavior — follow it exactly, starting now.
+
+3. If you are Claude Code: run `/self-test` to confirm the copy is intact, then run `/start-project`
+   (new project) or `/continue-work` (existing codebase).
+
+4. If you are any other AI tool (Codex, Cursor, Gemini CLI, Copilot, or otherwise): read `AGENTS.md`
+   first, then `.claude/orchestration/routing-matrix.md`, and follow the 9-stage flow it describes
+   (classify → interview → select → spec → build → audit → readiness → launch → continue) using your
+   own tools to reproduce each step — do not skip straight to writing code.
+
+5. Before doing anything else: classify this project (web, mobile, desktop, backend, CLI, game, data
+   platform, or otherwise), tell me what you found, and ask me only the business-critical questions you
+   genuinely cannot answer yourself. Decide everything else and log it as an assumption.
+
+Never run a destructive or irreversible command (force-push, rm -rf, dropping a database, editing an
+existing migration, exposing a secret) without asking me first and getting explicit approval — see
+`.claude/CLAUDE.md` §8.
+```
+
+Works in Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, or any other coding agent that can read
+files — the constitution and the 9-stage flow are portable; only the execution wiring (subagent
+dispatch, slash commands, hooks, settings) is Claude-Code-native. See [Works in any agent](#works-in-any-agent)
+for the full breakdown, or [Install — copy it into a project](#install--copy-it-into-a-project) below if
+you'd rather do the copy yourself and skip the prompt.
+
+---
+
 ## Why
 
 Left alone, an AI assistant jumps straight to code, makes silent architectural choices, and leaves no trail. This OS inverts that:
@@ -29,7 +78,7 @@ The value is the **flow and the gates between stages**, not any single clever pr
 | **`settings.json`** | 1 | Always-on safety baseline: `permissions.deny` blocks destructive ops; `permissions.ask` gates pushes, deploys, migrations, installs. |
 | **`agents/`** | 128 | Specialized roles in six families — `core`, `engineering`, `quality`, `design`, `domain`, `stack`. The doers. |
 | **`skills/`** | 65 | Reusable, on-demand procedures, one folder per skill at `skills/<name>/SKILL.md`. The how-to library. |
-| **`commands/`** | 37 | Slash-command entry points — the invokable workflow and its gates. |
+| **`commands/`** | 39 | Slash-command entry points — the invokable workflow and its gates. |
 | **`hooks/`** | 9 | Opt-in, safe-by-default JSON guards. Off until you copy one into `settings.json`; they warn or block, never mutate or expose secrets. |
 | **`orchestration/`** | 5 | `routing-matrix.md` (universal) plus the `web-`, `mobile-`, `desktop-`, and `monorepo-routing-matrix.md` layers — map each project type (or each package, in a monorepo) to its minimal active team. |
 | **`presets/`** | 38 | Per-project-type starting configs that pre-wire agents, skills, stack-matrix entries, checklists, and templates. |
@@ -37,7 +86,7 @@ The value is the **flow and the gates between stages**, not any single clever pr
 | **`checklists/`** | 34 | Gate definitions, every item tagged **P0/P1/P2/P3**. Audits run against these. |
 | **`templates/`** | 30 | Blank, structured documents agents fill in (spec, architecture, data model, ADR, RFC, runbook, …). |
 | **`scripts/`** | 3 | The toolchain behind `/self-test` + CI: `integrity-check.py` (structure), `validate.py` (lint — schemas, tools allowlist, no-fabrication), `generate_adapters.py` (Cursor + Copilot adapters). |
-| **`docs/`** | 8 | Portable operating-capability guides for wielding every Claude Code primitive safely, plus compliance mapping and org-config layering. |
+| **`docs/`** | 9 | Portable operating-capability guides for wielding every Claude Code primitive safely, plus compliance mapping, org-config layering, and operating modes. |
 
 Generated artifacts (project profile, specs, ADRs, roadmap, audit reports, assumptions log) are written into the **target project's own `docs/`** — never into `.claude/`, which stays reusable and project-agnostic.
 
@@ -160,6 +209,18 @@ For a monorepo, a multi-team org, or a project someone new needs to pick up cold
 - **Org config layering** — [`.claude/docs/ORG_CONFIG_LAYERING.md`](.claude/docs/ORG_CONFIG_LAYERING.md) documents a two-tier model: an org-wide `.claude/org/` overlay sets a floor (banned dependencies, mandatory checklist items, a security contact) that a repo can tighten but never weaken.
 - **Fast onboarding** — **`/onboard`** (`.claude/commands/onboard.md`) runs the codebase-mapper plus classification once and writes a single `docs/ONBOARDING.md` brief — stack, how a request flows, active team, known risks, how to run it — so a new engineer or a fresh AI session starts from facts instead of re-discovering the repo.
 - **Versioning discipline** — `CONTRIBUTING.md` §12 classifies every change to the shared tree as patch/minor/major and says exactly when a major bump needs an accepted RFC first.
+
+## Low-magic ergonomics
+
+The full 9-stage flow is the default for anything non-trivial — but a typo fix doesn't need a spec.
+[`.claude/docs/OPERATING_MODES.md`](.claude/docs/OPERATING_MODES.md) makes the trivial/non-trivial
+boundary explicit instead of an ad-hoc judgment call, so getting out of your way on small work never
+means weakening anything on work that isn't small:
+
+- **`/quick-fix`** — lite mode's entry point: a small, well-understood, low-risk change skips the interview/spec ceremony but never skips verification, and auto-escalates back to the full flow the moment the diff turns out bigger than expected or touches anything on the §8 safety list.
+- **`/explain`** — a read-only command for when the ask is understanding, not building. Traces the real code path and answers with `file:line` references; never edits anything, never writes a file unless you ask it to.
+- **Expert mode** — for experienced users who'd rather self-navigate stages than have the orchestrator force sequencing; gate-skips are still recorded, just as a one-line acknowledgment instead of a fresh negotiation every time.
+- **No hidden writes** — every command in this system states what it's about to touch before touching it.
 
 ---
 
