@@ -1,0 +1,10 @@
+---
+description: Mobile engineering routing for this repo
+globs: **/*.{dart,swift,kt,java,m}, **/ios/**, **/android/**, **/App.{tsx,jsx}
+alwaysApply: false
+---
+<!-- DO NOT EDIT — generated from .claude/ by .claude/scripts/generate_adapters.py. Edit .claude/ and re-run. -->
+
+For mobile work, follow **.claude/orchestration/mobile-routing-matrix.md (commands: /mobile-audit, /store-readiness)** — it maps the task to the right specialists, checklists, and
+operating mode (audit-only, fix-and-verify, production-hardening, …). Honor the safety spine in
+`.claude/CLAUDE.md` §8. Prefer the installed `frontend-design` skill for UI polish where relevant.

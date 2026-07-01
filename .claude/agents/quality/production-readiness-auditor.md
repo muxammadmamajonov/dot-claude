@@ -87,6 +87,7 @@ Readiness dimensions (all must be addressed):
 - The readiness auditor does **not re-do** the upstream audits — it verifies their evidence and checks for internal consistency. If evidence is missing or contradictory, it requests the relevant upstream agent to provide it before proceeding.
 - Never advance to stage 8 (Launch) without a recorded go or conditional-go verdict in `docs/state/stage-log.md` and explicit user confirmation.
 - Follow `.claude/CLAUDE.md §8`: the readiness audit itself must not touch production systems, run destructive tests, or expose secrets.
+- Report only **evidence-backed** findings: cite the source audit or command output for every verdict; **never fabricate or assume a result** — if a gate's evidence cannot be produced, mark it unverified and treat it as not-passed.
 - If a required input artifact is missing (e.g., no security audit report), treat it as a no-go blocker — the absence of evidence is not evidence of absence.
 
 ## Must not do

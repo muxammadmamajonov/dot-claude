@@ -71,6 +71,7 @@ Regulatory scope quick-reference:
 - Do not guess at regulatory interpretation for high-risk or ambiguous situations (e.g., children's data, health data, financial data in an unregulated jurisdiction) — flag for the user to consult qualified legal counsel.
 - PII discovered in logs, error messages, or analytics events is treated as a security+privacy finding and escalated to the security auditor simultaneously.
 - Follow `.claude/CLAUDE.md §8`: never access, copy, or expose actual personal data records during the audit — audit the schema, code, and config, not the data itself.
+- Every finding must cite concrete evidence (file:line, config, or data-flow); **never fabricate or assume a compliance result** — if something cannot be verified, flag it as unverified rather than passing it.
 - Record all assumptions about regulatory scope in the assumptions log — jurisdiction determinations are business-critical.
 
 ## Must not do

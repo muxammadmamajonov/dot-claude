@@ -4,6 +4,31 @@ All notable changes to the Universal `.claude` AI Project OS are documented here
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] — 2026-06-30
+
+Enterprise Phase 1 — generated Cursor/Copilot adapters + a trust-spine linter.
+
+### Added
+- **Cross-tool adapter generator** — `.claude/scripts/generate_adapters.py` derives editor adapters from
+  the canonical `.claude/` source: **Cursor** (`.cursor/rules/*.mdc` — global + web/mobile/desktop
+  path rules + skills index) and **GitHub Copilot** (`.github/copilot-instructions.md` +
+  `.github/instructions/*.instructions.md`). Generated files carry a `DO NOT EDIT — generated` header;
+  `--check` mode fails on drift. Outputs committed so they work on clone.
+- **Trust-spine linter** — `.claude/scripts/validate.py`: deterministic schema/rule checks
+  (agent frontmatter `name/description/model/color/tools`, `color` enum, `tools` allowlist, required
+  `When to use`/`When to invoke` section) as hard ERRORS, plus advisory WARNINGS (no-fabrication clause
+  on auditors, command/checklist section completeness). `--strict` makes warnings fatal.
+
+### Changed
+- CI (`.github/workflows/self-test.yml`) now runs integrity-check **+ validate + adapter sync-check**.
+- `/self-test` command documents all three checks.
+- `production-readiness-auditor` and `privacy-compliance-auditor` gained explicit no-fabrication/evidence
+  clauses (surfaced by the new linter).
+
+### Notes
+First of a phased enterprise roadmap (design: `docs/superpowers/specs/2026-06-30-enterprise-and-cross-tool-design.md`).
+Next: governance & compliance (v1.6.0), team & scale (v1.7.0), low-magic ergonomics (v1.8.0).
+
 ## [1.4.0] — 2026-06-30
 
 Cross-tool portability — usable beyond Claude Code.

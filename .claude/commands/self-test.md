@@ -15,17 +15,21 @@ Self-verify the reusable `.claude/` Operating System after editing or extending 
 - As a periodic regression guard.
 
 ## Workflow
-1. From the project root, run the checker:
+1. From the project root, run the three checkers (all stdlib, read-only, no network):
    ```bash
-   python3 .claude/scripts/integrity-check.py
+   python3 .claude/scripts/integrity-check.py      # structure
+   python3 .claude/scripts/validate.py             # lint (schemas/rules)
+   python3 .claude/scripts/generate_adapters.py --check   # cross-tool adapters in sync
    ```
-2. It runs four gates and exits non-zero if any fail:
+2. `integrity-check.py` runs four structural gates and exits non-zero if any fail:
    - **Cross-reference integrity** — every `.md` path referenced anywhere resolves to a real file. Generated `docs/` artifacts and fenced ``` code-block illustrations are correctly ignored.
    - **No shallow files** — content files under `.claude/{agents,skills,checklists,commands,presets,stack-matrix}` meet a minimum word count (default 300).
    - **Frontmatter** — every agent / skill / command declares a `description:`.
    - **JSON validity** — `settings.json` and every `hooks/*.json` parse.
-3. For each failure, fix the offending file. Most link failures are a wrong path: use a **root-relative** `.claude/...` reference (it resolves from any file depth — skills sit two levels deep, so `../checklists/x.md` is wrong; `.claude/checklists/x.md` is right).
-4. Re-run until the result is `PASS`.
+3. `validate.py` lints semantics — **ERRORS fail** (agent frontmatter `name/description/model/color/tools`, `color` enum, `tools` allowlist, a `When to use`/`When to invoke` section) and **WARNINGS advise** (no-fabrication clause on auditors, command/checklist section completeness). Use `--strict` to treat warnings as failures.
+4. `generate_adapters.py --check` confirms the committed **Cursor** (`.cursor/rules/*.mdc`) and **GitHub Copilot** (`.github/copilot-instructions.md`, `.github/instructions/*`) adapters are in sync with `.claude/`. If stale, run it without `--check` and commit. These three checks are the CI gate (`.github/workflows/self-test.yml`).
+5. For each failure, fix the offending file. Most link failures are a wrong path: use a **root-relative** `.claude/...` reference (it resolves from any file depth — skills sit two levels deep, so `../checklists/x.md` is wrong; `.claude/checklists/x.md` is right).
+6. Re-run until all three report `PASS` / clean.
 
 ## Agents used
 - None required. This is a deterministic script. If a content gate fails, hand the thin file to its owning agent (e.g. `.claude/agents/quality/qa-engineer.md` for a checklist) to deepen it.

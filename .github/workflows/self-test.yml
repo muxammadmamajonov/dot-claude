@@ -10,6 +10,9 @@ on:
   pull_request:
     paths:
       - ".claude/**"
+      - ".cursor/**"
+      - ".github/copilot-instructions.md"
+      - ".github/instructions/**"
       - ".github/workflows/self-test.yml"
 
 permissions:
@@ -17,12 +20,16 @@ permissions:
 
 jobs:
   integrity:
-    name: .claude integrity-check
+    name: .claude integrity + lint + adapter sync
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Run .claude/self-test
+      - name: Integrity check (links, depth, frontmatter, JSON)
         run: python3 .claude/scripts/integrity-check.py
+      - name: Lint (schemas, tools allowlist, no-fabrication)
+        run: python3 .claude/scripts/validate.py
+      - name: Adapters in sync with .claude/ (Cursor + Copilot)
+        run: python3 .claude/scripts/generate_adapters.py --check

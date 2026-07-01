@@ -36,7 +36,7 @@ The value is the **flow and the gates between stages**, not any single clever pr
 | **`stack-matrix/`** | 20 | Technology decision matrices per concern (web, backend, database, cloud, AI/ML, payments, …) with real trade-offs. |
 | **`checklists/`** | 34 | Gate definitions, every item tagged **P0/P1/P2/P3**. Audits run against these. |
 | **`templates/`** | 29 | Blank, structured documents agents fill in (spec, architecture, data model, ADR, runbook, …). |
-| **`scripts/`** | 1 | `integrity-check.py` — the link/frontmatter/JSON verifier behind `/self-test`. |
+| **`scripts/`** | 3 | The toolchain behind `/self-test` + CI: `integrity-check.py` (structure), `validate.py` (lint — schemas, tools allowlist, no-fabrication), `generate_adapters.py` (Cursor + Copilot adapters). |
 | **`docs/`** | 6 | Portable operating-capability guides for wielding every Claude Code primitive safely. |
 
 Generated artifacts (project profile, specs, ADRs, roadmap, audit reports, assumptions log) are written into the **target project's own `docs/`** — never into `.claude/`, which stays reusable and project-agnostic.
@@ -186,7 +186,9 @@ The OS is meant to be tuned per organization and per project.
 
 ## Works in any agent
 
-It's **native to Claude Code** (the `claude` CLI — interactive *and* headless `claude -p` / Agent SDK / CI): agents, slash commands, skills, hooks, and `settings.json` all execute with zero setup. It's also **usable in other agents** (Codex, Cursor, Gemini CLI, Copilot CLI, opencode) via the root **[`AGENTS.md`](AGENTS.md)** entry point — the constitution, skills, checklists, templates, and docs are portable plain markdown; only the execution wiring (subagent dispatch, slash commands, hooks, settings) is Claude Code-specific and is read as a spec elsewhere. Full breakdown: the portability matrix in [`.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md`](.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md).
+It's **native to Claude Code** (the `claude` CLI — interactive *and* headless `claude -p` / Agent SDK / CI): agents, slash commands, skills, hooks, and `settings.json` all execute with zero setup. It's also **usable in other agents** (Codex, Cursor, Gemini CLI, Copilot CLI, opencode) via the root **[`AGENTS.md`](AGENTS.md)** entry point — the constitution, skills, checklists, templates, and docs are portable plain markdown; only the execution wiring (subagent dispatch, slash commands, hooks, settings) is Claude Code-specific and is read as a spec elsewhere.
+
+For **Cursor** and **GitHub Copilot**, ready-made adapters are **generated from `.claude/`** — `.cursor/rules/*.mdc` and `.github/copilot-instructions.md` + `.github/instructions/*` — so those editors pick up the operating rules with zero setup. They're produced by `.claude/scripts/generate_adapters.py` (`.claude/` is the single source of truth) and a CI drift-check keeps them in sync; the files carry a `DO NOT EDIT — generated` header. Full breakdown: the portability matrix in [`.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md`](.claude/docs/CLAUDE_CODE_OPERATING_MODEL.md).
 
 ## Learn more
 

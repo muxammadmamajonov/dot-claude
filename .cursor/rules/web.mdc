@@ -1,0 +1,10 @@
+---
+description: Web engineering routing for this repo
+globs: **/*.{ts,tsx,js,jsx,vue,svelte,astro,css,scss,html}
+alwaysApply: false
+---
+<!-- DO NOT EDIT — generated from .claude/ by .claude/scripts/generate_adapters.py. Edit .claude/ and re-run. -->
+
+For web work, follow **.claude/orchestration/web-routing-matrix.md (commands: /web-audit, /web-readiness)** — it maps the task to the right specialists, checklists, and
+operating mode (audit-only, fix-and-verify, production-hardening, …). Honor the safety spine in
+`.claude/CLAUDE.md` §8. Prefer the installed `frontend-design` skill for UI polish where relevant.

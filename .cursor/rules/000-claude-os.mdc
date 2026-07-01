@@ -1,0 +1,15 @@
+---
+description: Universal .claude AI Project OS — core operating rules for this repo
+alwaysApply: true
+---
+<!-- DO NOT EDIT — generated from .claude/ by .claude/scripts/generate_adapters.py. Edit .claude/ and re-run. -->
+
+This repository uses the **Universal .claude AI Project Operating System**. Treat `.claude/CLAUDE.md`
+as the constitution and `AGENTS.md` as the cross-tool entry point — read them and follow them.
+
+- 9-stage flow: classify → interview → select → spec → build (small safe phases) → audit (security/QA/performance/accessibility) → readiness → launch → continue. Coding is stage 5; understand first. Pick the team via .claude/orchestration/routing-matrix.md.
+- Safety spine (always): read before write; least privilege & least blast radius; never expose secrets (reference, never reveal); human-in-the-loop for anything irreversible; headless/scheduled runs are read/review-only by default; never assume an MCP server exists; document the why. Full rules: .claude/CLAUDE.md §8.
+- Specs precede code; record assumptions (`.claude/templates/assumptions-log.md`) and decisions (`.claude/templates/decision-record.md`).
+- The full agent/skill/checklist library lives under `.claude/`. In Cursor, treat `.claude/agents/*` and
+  `.claude/commands/*` as role briefs / runnable workflows and reproduce their intent with Cursor's tools;
+  apply `.claude/checklists/*` as gates and `.claude/skills/*` as procedures.
