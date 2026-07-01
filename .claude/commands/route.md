@@ -18,8 +18,9 @@ Avoid activating the full `.claude/` system on every project. Read (or derive) t
 
 ### Step 0 — Load project state
 1. Read `.claude/agents/core/orchestrator.md` to understand delegation rules and context-loading policy.
-2. If `force-reclassify` was NOT passed and `docs/state/project-type.md` exists, read it — use the cached classification. Skip to Step 2.
-3. If no cached classification exists, proceed to Step 1.
+2. **Detect monorepo/multi-service topology** against `.claude/orchestration/monorepo-routing-matrix.md`'s signals (workspace tooling — `pnpm-workspace.yaml`, `turbo.json`, `nx.json`, `lerna.json`, `rush.json`, Cargo `[workspace]`, `go.work`, Bazel — or multiple independent manifests under `apps/`, `packages/`, `services/`). If detected, switch to **monorepo mode**: run Steps 1–4 below **once per affected package** (scoping Step 1's file reads to that package's own subtree), plus once for root-scoped concerns (CI, shared lockfile, release — see that matrix's *Root vs package-scoped concerns* table), and write `docs/state/monorepo.md` plus one `docs/state/packages/<name>/project-type.md` and `active-team.md` per package instead of the single-project files below. Otherwise continue as a single project.
+3. If `force-reclassify` was NOT passed and `docs/state/project-type.md` (or, in monorepo mode, every affected package's cached file) exists, read it — use the cached classification. Skip to Step 2.
+4. If no cached classification exists, proceed to Step 1.
 
 ### Step 1 — Classify (if needed)
 1. Read the repo root: `README*`, `package.json`, `Cargo.toml`, `pyproject.toml`, `build.gradle`, `*.csproj`, `go.mod`, manifest files, `Dockerfile`, `Makefile`, `*.unity`, `hardhat.config.*`, `*.ino`, `requirements.txt`, `Pipfile`, `CMakeLists.txt`, etc.

@@ -29,6 +29,35 @@ Enterprise Phase 2 — governance & compliance.
 Second phase of the enterprise roadmap (design:
 `docs/superpowers/specs/2026-06-30-enterprise-and-cross-tool-design.md`). Next: team & scale (v1.7.0).
 
+## [1.7.0] — 2026-07-01
+
+Enterprise Phase 3 — team & scale.
+
+### Added
+- **Monorepo orchestration** — `.claude/orchestration/monorepo-routing-matrix.md`: workspace-topology
+  detection, per-package classification, root-vs-package-scoped concerns, dependency-graph-sized blast
+  radius, and gate aggregation so one shared-package change doesn't force a full-repo re-audit. Wired
+  into `.claude/orchestration/routing-matrix.md`, `.claude/commands/route.md` (Step 0 topology
+  detection), and `.claude/agents/core/orchestrator.md`'s Selection algorithm.
+- **Org config layering** — `.claude/docs/ORG_CONFIG_LAYERING.md`: a two-tier model (org floor + repo
+  ceiling of choice) via an optional `.claude/org/` overlay (`org-constitution.md`,
+  `stack-matrix-overrides.md`, `checklist-additions/`). Org rules may only add constraints, never weaken
+  `.claude/CLAUDE.md` §8. The orchestrator loads it first, if present.
+- **`/onboard`** — `.claude/commands/onboard.md`: runs the codebase-mapper plus classification once and
+  writes `docs/ONBOARDING.md` — stack, request flow, active team, risks, run commands, recommended next
+  action — for a new engineer or a fresh AI session on an existing repo.
+- **Versioning & contribution model** — `CONTRIBUTING.md` §12: classifies changes to the shared
+  `.claude/` tree as patch/minor/major and ties major bumps to the §11 RFC process.
+
+### Changed
+- `.claude/agents/core/orchestrator.md` Selection algorithm gained explicit Step 0 (org overrides) and
+  Step 1 (monorepo topology) before classification.
+
+### Notes
+Third phase of the enterprise roadmap (design:
+`docs/superpowers/specs/2026-06-30-enterprise-and-cross-tool-design.md`). Next: low-magic ergonomics
+(v1.8.0).
+
 ## [1.5.0] — 2026-06-30
 
 Enterprise Phase 1 — generated Cursor/Copilot adapters + a trust-spine linter.

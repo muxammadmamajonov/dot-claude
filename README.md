@@ -29,15 +29,15 @@ The value is the **flow and the gates between stages**, not any single clever pr
 | **`settings.json`** | 1 | Always-on safety baseline: `permissions.deny` blocks destructive ops; `permissions.ask` gates pushes, deploys, migrations, installs. |
 | **`agents/`** | 128 | Specialized roles in six families — `core`, `engineering`, `quality`, `design`, `domain`, `stack`. The doers. |
 | **`skills/`** | 65 | Reusable, on-demand procedures, one folder per skill at `skills/<name>/SKILL.md`. The how-to library. |
-| **`commands/`** | 36 | Slash-command entry points — the invokable workflow and its gates. |
+| **`commands/`** | 37 | Slash-command entry points — the invokable workflow and its gates. |
 | **`hooks/`** | 9 | Opt-in, safe-by-default JSON guards. Off until you copy one into `settings.json`; they warn or block, never mutate or expose secrets. |
-| **`orchestration/`** | 4 | `routing-matrix.md` (universal) plus the `web-`, `mobile-`, and `desktop-routing-matrix.md` engineering layers — map each project type to its minimal active team. |
+| **`orchestration/`** | 5 | `routing-matrix.md` (universal) plus the `web-`, `mobile-`, `desktop-`, and `monorepo-routing-matrix.md` layers — map each project type (or each package, in a monorepo) to its minimal active team. |
 | **`presets/`** | 38 | Per-project-type starting configs that pre-wire agents, skills, stack-matrix entries, checklists, and templates. |
 | **`stack-matrix/`** | 20 | Technology decision matrices per concern (web, backend, database, cloud, AI/ML, payments, …) with real trade-offs. |
 | **`checklists/`** | 34 | Gate definitions, every item tagged **P0/P1/P2/P3**. Audits run against these. |
-| **`templates/`** | 29 | Blank, structured documents agents fill in (spec, architecture, data model, ADR, runbook, …). |
+| **`templates/`** | 30 | Blank, structured documents agents fill in (spec, architecture, data model, ADR, RFC, runbook, …). |
 | **`scripts/`** | 3 | The toolchain behind `/self-test` + CI: `integrity-check.py` (structure), `validate.py` (lint — schemas, tools allowlist, no-fabrication), `generate_adapters.py` (Cursor + Copilot adapters). |
-| **`docs/`** | 6 | Portable operating-capability guides for wielding every Claude Code primitive safely. |
+| **`docs/`** | 8 | Portable operating-capability guides for wielding every Claude Code primitive safely, plus compliance mapping and org-config layering. |
 
 Generated artifacts (project profile, specs, ADRs, roadmap, audit reports, assumptions log) are written into the **target project's own `docs/`** — never into `.claude/`, which stays reusable and project-agnostic.
 
@@ -151,6 +151,15 @@ On top of the core flow, the OS ships a governance layer for teams that need rev
 - **RFC process** — significant changes to the shared `.claude/` OS itself (a new stage, a new agent family, a schema change) go through [`.claude/templates/rfc.md`](.claude/templates/rfc.md) and `CONTRIBUTING.md` §11 before code — distinct from [`.claude/templates/decision-record.md`](.claude/templates/decision-record.md), which is for a *consuming* project's own technical decisions.
 - **Compliance mapping** — [`.claude/docs/COMPLIANCE.md`](.claude/docs/COMPLIANCE.md) maps the OS's existing gates and checklists to SOC 2, ISO/IEC 27001, SLSA, and OWASP control families, so a team already running this OS can see what evidence it already produces as a byproduct of delivery. It is a mapping aid, not a certification — read its disclaimer first.
 - **Complete OSS governance set** — [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) and [`SUPPORT.md`](SUPPORT.md) join the existing [`SECURITY.md`](SECURITY.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Team & scale
+
+For a monorepo, a multi-team org, or a project someone new needs to pick up cold:
+
+- **Monorepo orchestration** — [`.claude/orchestration/monorepo-routing-matrix.md`](.claude/orchestration/monorepo-routing-matrix.md) detects workspace topology, classifies each package independently, separates root-scoped concerns (CI, shared lockfile, release) from package-scoped ones, and sizes the blast radius of a shared-package change from the dependency graph instead of re-auditing the whole repo. `/route` runs this detection first.
+- **Org config layering** — [`.claude/docs/ORG_CONFIG_LAYERING.md`](.claude/docs/ORG_CONFIG_LAYERING.md) documents a two-tier model: an org-wide `.claude/org/` overlay sets a floor (banned dependencies, mandatory checklist items, a security contact) that a repo can tighten but never weaken.
+- **Fast onboarding** — **`/onboard`** (`.claude/commands/onboard.md`) runs the codebase-mapper plus classification once and writes a single `docs/ONBOARDING.md` brief — stack, how a request flows, active team, known risks, how to run it — so a new engineer or a fresh AI session starts from facts instead of re-discovering the repo.
+- **Versioning discipline** — `CONTRIBUTING.md` §12 classifies every change to the shared tree as patch/minor/major and says exactly when a major bump needs an accepted RFC first.
 
 ---
 
