@@ -143,6 +143,17 @@ For UI/visual polish all three layers prefer the high-install `frontend-design` 
 
 ---
 
+## Governance & compliance
+
+On top of the core flow, the OS ships a governance layer for teams that need review discipline and a compliance paper trail, not just working code.
+
+- **Review ownership** — [`.github/CODEOWNERS`](.github/CODEOWNERS) routes changes to the constitution, safety baseline, and security/compliance-sensitive paths to the right reviewers (ships with placeholder teams — replace them before this takes effect).
+- **RFC process** — significant changes to the shared `.claude/` OS itself (a new stage, a new agent family, a schema change) go through [`.claude/templates/rfc.md`](.claude/templates/rfc.md) and `CONTRIBUTING.md` §11 before code — distinct from [`.claude/templates/decision-record.md`](.claude/templates/decision-record.md), which is for a *consuming* project's own technical decisions.
+- **Compliance mapping** — [`.claude/docs/COMPLIANCE.md`](.claude/docs/COMPLIANCE.md) maps the OS's existing gates and checklists to SOC 2, ISO/IEC 27001, SLSA, and OWASP control families, so a team already running this OS can see what evidence it already produces as a byproduct of delivery. It is a mapping aid, not a certification — read its disclaimer first.
+- **Complete OSS governance set** — [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) and [`SUPPORT.md`](SUPPORT.md) join the existing [`SECURITY.md`](SECURITY.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+---
+
 ## Safety rules
 
 The OS is **safe by default**, enforced two ways.
@@ -197,5 +208,7 @@ For **Cursor** and **GitHub Copilot**, ready-made adapters are **generated from 
 - **[PROJECT_OS.md](PROJECT_OS.md)** — the design philosophy and full flow in depth.
 - **[examples/](examples/)** — worked project briefs across types (web/SaaS, mobile, game, AI agent).
 - **[.claude/CLAUDE.md](.claude/CLAUDE.md)** — the constitution every agent obeys.
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — house style, the RFC process (§11), and versioning discipline for the shared tree (§12).
+- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**, **[SUPPORT.md](SUPPORT.md)**, **[SECURITY.md](SECURITY.md)** — the community, help, and safety-reporting docs.
 
 Key cross-references to read first: [`.claude/agents/core/orchestrator.md`](.claude/agents/core/orchestrator.md), [`.claude/orchestration/routing-matrix.md`](.claude/orchestration/routing-matrix.md), [`.claude/checklists/security.md`](.claude/checklists/security.md), and [`.claude/templates/architecture.md`](.claude/templates/architecture.md).

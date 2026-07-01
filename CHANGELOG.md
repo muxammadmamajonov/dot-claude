@@ -4,6 +4,31 @@ All notable changes to the Universal `.claude` AI Project OS are documented here
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the
 project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] — 2026-07-01
+
+Enterprise Phase 2 — governance & compliance.
+
+### Added
+- **`.github/CODEOWNERS`** — review ownership mapped across `.claude/` families (constitution, safety
+  baseline, security/compliance-sensitive agents and checklists, orchestration, toolchain, governance
+  meta). Ships with placeholder team handles for adopters to fill in.
+- **RFC process** — `.claude/templates/rfc.md` + `CONTRIBUTING.md` §11: significant changes to the shared
+  `.claude/` OS itself (new stage, new agent family, §8 change, schema change) require a filed, reviewed
+  RFC before implementation — distinct from `.claude/templates/decision-record.md`, which stays scoped to
+  a consuming project's own technical decisions.
+- **`.claude/docs/COMPLIANCE.md`** — maps existing gates/checklists/agents to SOC 2, ISO/IEC 27001, SLSA,
+  and OWASP (ASVS + Top 10) control families, with an explicit disclaimer that this is a control-mapping
+  aid, not a certification, plus an evidence-chain guide and a list of what it deliberately does not cover.
+- **`CODE_OF_CONDUCT.md`** and **`SUPPORT.md`** — complete the OSS governance set alongside the existing
+  `SECURITY.md` and `CONTRIBUTING.md`.
+
+### Changed
+- `CONTRIBUTING.md`'s PR checklist gained an RFC/versioning line item.
+
+### Notes
+Second phase of the enterprise roadmap (design:
+`docs/superpowers/specs/2026-06-30-enterprise-and-cross-tool-design.md`). Next: team & scale (v1.7.0).
+
 ## [1.5.0] — 2026-06-30
 
 Enterprise Phase 1 — generated Cursor/Copilot adapters + a trust-spine linter.

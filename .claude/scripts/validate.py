@@ -36,7 +36,7 @@ def fm_get(fm, key):
 def walk(sub):
     for dp, _, fs in os.walk(os.path.join(A, sub)):
         for fn in fs:
-            if fn.endswith(".md"):
+            if fn.endswith(".md") and not fn.startswith("._"):
                 yield os.path.join(dp, fn)
 
 def check_agents():

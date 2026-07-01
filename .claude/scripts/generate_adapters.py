@@ -44,6 +44,8 @@ def _list(sub, suffix=None, stem=False):
         return []
     out = []
     for name in sorted(os.listdir(d)):
+        if name.startswith("._"):
+            continue
         p = os.path.join(d, name)
         if suffix and os.path.isfile(p) and name.endswith(suffix):
             out.append(name[:-len(suffix)] if stem else name)

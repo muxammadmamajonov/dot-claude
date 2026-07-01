@@ -1,0 +1,58 @@
+# CODEOWNERS — governance for the Universal .claude AI Project OS
+#
+# This maps review ownership across the .claude/ families so security-, safety-, and
+# constitution-level changes get the right eyes before merge (GitHub docs:
+# https://docs.github.com/articles/about-code-owners).
+#
+# IMPORTANT — this ships with placeholder handles. Replace every @your-org/... team
+# below with real GitHub users/teams for your organization before this file takes
+# effect. GitHub silently ignores rules that point at a team/user with no repo access —
+# it will not error the build, it will simply skip requesting that review. Last rule
+# to match a path wins, so more specific paths should stay below broader ones.
+#
+# This file lives in .github/ (not .claude/) because CODEOWNERS is a GitHub review
+# mechanism, not part of the portable .claude/ tree — it does not travel with a copy
+# of .claude/ into another repo and does not need to.
+
+# ── Default owner for anything not matched below ────────────────────────────
+*                                               @your-org/maintainers
+
+# ── The constitution — changes here affect every project this template is
+#    copied into; require the highest bar of review ─────────────────────────
+/.claude/CLAUDE.md                             @your-org/maintainers @your-org/staff-eng
+
+# ── Always-on safety baseline — tightening or loosening the deny/ask lists,
+#    or adding/editing a hook, requires security sign-off ───────────────────
+/.claude/settings.json                         @your-org/security-team
+/.claude/hooks/                                @your-org/security-team
+/.claude/docs/HOOKS_SAFETY_MODEL.md            @your-org/security-team
+
+# ── Security- and privacy-sensitive agents, checklists, and docs ────────────
+/.claude/agents/quality/security-auditor.md            @your-org/security-team
+/.claude/agents/quality/privacy-compliance-auditor.md  @your-org/security-team @your-org/legal
+/.claude/agents/quality/production-readiness-auditor.md @your-org/security-team
+/.claude/checklists/security.md                @your-org/security-team
+/.claude/checklists/privacy-compliance.md      @your-org/security-team @your-org/legal
+/.claude/checklists/dependencies.md            @your-org/security-team
+/.claude/templates/threat-model.md             @your-org/security-team
+/.claude/templates/security-model.md           @your-org/security-team
+/.claude/docs/COMPLIANCE.md                    @your-org/security-team @your-org/legal
+/SECURITY.md                                   @your-org/security-team
+
+# ── Orchestrator and routing — changes affect delegation and team assembly
+#    across every project type, not just one ────────────────────────────────
+/.claude/agents/core/orchestrator.md           @your-org/staff-eng
+/.claude/orchestration/                        @your-org/staff-eng
+/.claude/docs/ORG_CONFIG_LAYERING.md           @your-org/staff-eng
+
+# ── Trust-spine toolchain and CI — the deterministic gates everything else
+#    is checked against ──────────────────────────────────────────────────────
+/.claude/scripts/                              @your-org/staff-eng
+/.github/workflows/                            @your-org/staff-eng
+
+# ── Governance meta — who can change how contributions/review/process work ──
+/CONTRIBUTING.md                               @your-org/maintainers
+/.github/CODEOWNERS                            @your-org/maintainers
+/CODE_OF_CONDUCT.md                            @your-org/maintainers
+/.claude/templates/rfc.md                      @your-org/maintainers
+/docs/rfcs/                                    @your-org/maintainers @your-org/staff-eng

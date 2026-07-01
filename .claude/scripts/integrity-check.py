@@ -28,7 +28,7 @@ def md_files():
         if "/.git" in dp:
             continue
         for fn in fs:
-            if fn.endswith(".md"):
+            if fn.endswith(".md") and not fn.startswith("._"):
                 yield os.path.join(dp, fn)
 
 def check_links():
@@ -71,7 +71,7 @@ def check_frontmatter():
     for sub in ("agents", "skills", "commands"):
         for dp, _, fs in os.walk(os.path.join(base, sub)):
             for fn in fs:
-                if not fn.endswith(".md"):
+                if not fn.endswith(".md") or fn.startswith("._"):
                     continue
                 # Under skills/, only the SKILL.md itself is a registered skill needing
                 # frontmatter; bundled references/examples (progressive disclosure) do not.
@@ -89,7 +89,8 @@ def check_json():
     candidates = [os.path.join(cfg, "settings.json")]
     hooks = os.path.join(cfg, "hooks")
     if os.path.isdir(hooks):
-        candidates += [os.path.join(hooks, f) for f in os.listdir(hooks) if f.endswith(".json")]
+        candidates += [os.path.join(hooks, f) for f in os.listdir(hooks)
+                       if f.endswith(".json") and not f.startswith("._")]
     for j in candidates:
         if not os.path.exists(j):
             continue

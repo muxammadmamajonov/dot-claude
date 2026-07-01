@@ -195,6 +195,64 @@ Be honest about trade-offs and risks. The matrix exists to prevent cargo-culting
 
 ---
 
+## 11. Proposing a significant change (RFC)
+
+Most contributions are a normal PR against the per-type rules above. A smaller set of changes affect
+**every project this template gets copied into** and need a written proposal reviewed *before* code:
+a new stage or gate in the 9-stage flow, a new agent family, a change to `.claude/CLAUDE.md` §8 safety
+rules, a new required frontmatter field (a schema change `validate.py` must also learn), removing or
+renaming a widely-referenced agent/skill/command, or a new pillar-level capability (in the spirit of the
+enterprise pillars: trust & determinism, governance & compliance, team & scale, low-magic ergonomics).
+
+**Process:**
+1. Copy `.claude/templates/rfc.md`, fill it in, and save it as `docs/rfcs/<YYYY-MM-DD>-<slug>.md` in
+   this repo (this repo's own `docs/rfcs/` — distinct from a *consuming* project's `docs/`, which the OS
+   writes specs and decisions into once copied elsewhere; see `.claude/docs/MEMORY_STRATEGY.md`).
+2. Open a PR that adds the RFC file alone (no implementation yet) so the design is reviewed before the
+   diff. Status starts at `Draft`, moves to `In Review` once opened.
+3. Discussion happens on the PR. The reviewers named by `.github/CODEOWNERS` for the paths the RFC would
+   touch make the call; unresolved trade-offs get written into the RFC's *Unresolved Questions* section,
+   not left implicit.
+4. Once `Accepted`, implement in a follow-up PR (or a series of small ones) that satisfies the *Rollout
+   Plan* checklist in the RFC — including the CHANGELOG entry referencing the RFC number.
+5. `Rejected` or `Withdrawn` RFCs stay in `docs/rfcs/` as a record of what was considered and why it
+   didn't move forward — do not delete them.
+
+**When an RFC is *not* the right tool:**
+- A single project's own technical decision (which database, which framework) is a
+  `.claude/templates/decision-record.md` filed in *that project's* `docs/decisions/` — never an RFC, and
+  never filed in this repo.
+- Adding a new agent/skill/preset/checklist/template *within an existing family*, or refining existing
+  content, follows the per-type rules in §3–§9 above as a normal PR — no RFC needed.
+
+---
+
+## 12. Versioning the .claude/ tree
+
+The template versions as a whole (`CHANGELOG.md`, Semantic Versioning) — individual agents, skills, or
+commands are not released or versioned independently, because they only ever ship as part of the full
+`.claude/` copy a project takes. When you contribute, classify your change so the changelog entry (and
+whether an RFC was required, per §11) matches its real impact:
+
+- **Patch** — typo/doc fixes, broken-link repairs, tightening a checklist item's wording without changing
+  its intent, non-behavioral refactors of an agent/skill/command's prose. No RFC.
+- **Minor** — a new agent/skill/preset/checklist/template/stack-matrix entry added within an existing
+  family; refining an existing agent's responsibilities without changing its frontmatter schema or
+  removing a handoff another agent depends on. No RFC unless it also trips a §11 trigger.
+- **Major** — anything in the §11 RFC trigger list: new stage/gate, new agent family, `.claude/CLAUDE.md`
+  §8 changes, a frontmatter/schema change, or removing/renaming something other files reference by path.
+  Requires an accepted RFC first, and — because an existing adopter's copy of `.claude/` may now be out
+  of sync with the new schema — the RFC's *Backward Compatibility & Migration* section must say exactly
+  what an existing project needs to do to stay green under `.claude/scripts/validate.py`.
+
+**Proposing a version bump:** the PR that closes out a phase updates `CHANGELOG.md` under a new
+`## [x.y.z] — <date>` heading (see the existing entries for the exact style) and, for a major bump,
+links back to the accepted RFC. Do not bump the version number without a corresponding changelog entry —
+`self-test` doesn't check this mechanically, so it is a review-time responsibility (`.github/CODEOWNERS`
+routes `CHANGELOG.md` changes to the same maintainers who own `CONTRIBUTING.md`).
+
+---
+
 ## The must-pass gate
 
 Run the integrity check from the repo root before opening any PR:
@@ -225,5 +283,6 @@ Copy this into your pull request description and tick every box:
 - [ ] Any new agent/command that joins the core flow is registered in `.claude/agents/core/orchestrator.md` and/or `.claude/orchestration/routing-matrix.md`, with explicit handoffs.
 - [ ] Safety preserved: no weakening of `.claude/CLAUDE.md` §8 or `.claude/settings.json`; hooks remain warn/block-only with no mutation, install, or secret exposure.
 - [ ] Assumptions and non-obvious decisions are documented in the PR description.
+- [ ] If this change trips an RFC trigger (§11) — new stage/gate, new agent family, §8 change, schema change, or a removal/rename other files reference — an accepted RFC is linked, and the version bump matches its real impact (§12).
 
 Welcome aboard — keep it universal, keep it safe, keep it substantive.
